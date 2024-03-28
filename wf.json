@@ -1,0 +1,379 @@
+{
+  "last_node_id": 7,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 7,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        1375.5,
+        226.5
+      ],
+      "size": [
+        315,
+        527
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "name": "audio",
+          "type": "VHS_AUDIO",
+          "link": null
+        },
+        {
+          "name": "batch_manager",
+          "type": "VHS_BatchManager",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 8,
+        "loop_count": 0,
+        "filename_prefix": "AnimateDiff",
+        "format": "image/gif",
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "AnimateDiff_00076.gif",
+            "subfolder": "",
+            "type": "output",
+            "format": "image/gif"
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "AniPortraitRun",
+      "pos": [
+        869,
+        209
+      ],
+      "size": [
+        315,
+        334
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pipe",
+          "type": "Pose2VideoPipeline",
+          "link": 1
+        },
+        {
+          "name": "a2m_model",
+          "type": "Audio2MeshModel",
+          "link": 2
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 3
+        },
+        {
+          "name": "pose",
+          "type": "IMAGE",
+          "link": 4
+        },
+        {
+          "name": "video_length",
+          "type": "INT",
+          "link": 6,
+          "widget": {
+            "name": "video_length"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            5
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AniPortraitRun"
+      },
+      "widgets_values": [
+        "/home/admin/ComfyUI/models/diffusers/facebook/wav2vec2-base-960h",
+        "/home/admin/ComfyUI/custom_nodes/ComfyUI-AniPortrait/configs/inference/audio/lyl.wav",
+        512,
+        512,
+        0,
+        25,
+        3.5,
+        73,
+        "randomize",
+        "fp16"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "VHS_LoadVideoPath",
+      "pos": [
+        490,
+        622
+      ],
+      "size": [
+        317.4000244140625,
+        238
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "batch_manager",
+          "type": "VHS_BatchManager",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "frame_count",
+          "type": "INT",
+          "links": [
+            6
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "audio",
+          "type": "VHS_AUDIO",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "video_info",
+          "type": "VHS_VIDEOINFO",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_LoadVideoPath"
+      },
+      "widgets_values": {
+        "video": "/home/admin/ComfyUI/custom_nodes/ComfyUI-AniPortrait/configs/inference/head_pose_temp/pose_ref_video.mp4",
+        "force_rate": 0,
+        "force_size": "Disabled",
+        "custom_width": 512,
+        "custom_height": 512,
+        "frame_load_cap": 0,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "frame_load_cap": 0,
+            "skip_first_frames": 0,
+            "force_rate": 0,
+            "filename": "/home/admin/ComfyUI/custom_nodes/ComfyUI-AniPortrait/configs/inference/head_pose_temp/pose_ref_video.mp4",
+            "type": "path",
+            "format": "video/mp4",
+            "select_every_nth": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "LoadImage",
+      "pos": [
+        88,
+        583
+      ],
+      "size": {
+        "0": 315,
+        "1": 314
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            3
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "lyl.png",
+        "image"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "AniPortraitLoader",
+      "pos": [
+        38,
+        173
+      ],
+      "size": [
+        369.8859980684607,
+        354
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "pipe",
+          "type": "Pose2VideoPipeline",
+          "links": [
+            1
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "a2m_model",
+          "type": "Audio2MeshModel",
+          "links": [
+            2
+          ],
+          "shape": 3,
+          "slot_index": 1
+        },
+        {
+          "name": "vae",
+          "type": "vae",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "image_enc",
+          "type": "image_enc",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "noise_scheduler",
+          "type": "noise_scheduler",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AniPortraitLoader"
+      },
+      "widgets_values": [
+        "/home/admin/ComfyUI/models/diffusers/stable-diffusion-v1-5",
+        "/home/admin/ComfyUI/models/diffusers/sd-vae-ft-mse",
+        "/home/admin/ComfyUI/models/diffusers/sd-image-variations-diffusers/image_encoder",
+        "/home/admin/ComfyUI/models/diffusers/facebook/wav2vec2-base-960h",
+        "/home/admin/ComfyUI/models/diffusers/ZJYang/AniPortrait/audio2mesh.pt",
+        "/home/admin/ComfyUI/models/diffusers/ZJYang/AniPortrait/motion_module.pth",
+        "/home/admin/ComfyUI/models/diffusers/ZJYang/AniPortrait/denoising_unet.pth",
+        "/home/admin/ComfyUI/models/diffusers/ZJYang/AniPortrait/reference_unet.pth",
+        "/home/admin/ComfyUI/models/diffusers/ZJYang/AniPortrait/pose_guider.pth",
+        "fp16"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "Pose2VideoPipeline"
+    ],
+    [
+      2,
+      2,
+      1,
+      3,
+      1,
+      "Audio2MeshModel"
+    ],
+    [
+      3,
+      4,
+      0,
+      3,
+      2,
+      "IMAGE"
+    ],
+    [
+      4,
+      6,
+      0,
+      3,
+      3,
+      "IMAGE"
+    ],
+    [
+      5,
+      3,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      6,
+      1,
+      3,
+      4,
+      "INT"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}
