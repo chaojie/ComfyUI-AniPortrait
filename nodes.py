@@ -80,7 +80,8 @@ class AniPortraitLoader:
         parser.add_argument("--cfg", type=float, default=3.5)
         parser.add_argument("--steps", type=int, default=25)
         parser.add_argument("--fps", type=int, default=30)
-        args = parser.parse_args()
+        #args = parser.parse_args()
+        args, unknown = parser.parse_known_args()
         
         config = OmegaConf.load(args.config)
 
@@ -217,7 +218,7 @@ class AniPortraitRun:
         parser.add_argument("--cfg", type=float, default=3.5)
         parser.add_argument("--steps", type=int, default=25)
         parser.add_argument("--fps", type=int, default=30)
-        args = parser.parse_args()
+        args, unknown = parser.parse_known_args()
         
         generator = torch.manual_seed(args.seed)
         args.W=width
@@ -291,7 +292,10 @@ class AniPortraitRun:
             frame = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
             frame = cv2.resize(frame, (args.H, args.W))
             result = lmk_extractor(frame)
-            trans_mat_list.append(result['trans_mat'].astype(np.float32))
+            if result is not None and result['trans_mat'] is not None:
+                trans_mat_list.append(result['trans_mat'].astype(np.float32))
+            else:
+                trans_mat_list.append(trans_mat_list[-1])
         trans_mat_arr = np.array(trans_mat_list)
 
         # compute delta pose
@@ -390,9 +394,89 @@ class AniPortraitRun:
         print(f'{video.shape}')
         
         return video
-    
+
+class MaskList2Video:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "mask": ("MASK",),
+                "padding": ("INT",{"defualt":10}),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE","BOX",)
+    FUNCTION = "run"
+    CATEGORY = "AniPortrait"
+    OUTPUT_NODE = True
+
+    def run(self, image, mask, padding):
+        from torchvision.ops import masks_to_boxes
+        boxes = masks_to_boxes(mask)
+        print(f'{boxes}')
+        box=[int(torch.min(boxes,dim=0).values[0]),int(torch.max(boxes,dim=0).values[1]),int(torch.min(boxes,dim=0).values[2]),int(torch.max(boxes,dim=0).values[3])]
+        
+        if box[0]-padding>0:
+            box[0]=box[0]-padding
+        else:
+            box[0]=0
+        if box[1]-padding>0:
+            box[1]=box[1]-padding
+        else:
+            box[1]=0
+        if box[2]+padding<image.shape[2]:
+            box[2]=box[2]+padding
+        else:
+            box[2]=image.shape[2]
+        if box[3]+padding<image.shape[1]:
+            box[3]=box[3]+padding
+        else:
+            box[3]=image.shape[1]
+        return (image[:,box[1]:box[3],box[0]:box[2],:],box,)
+
+class Box2Video:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "box": ("BOX",),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE","BOX",)
+    FUNCTION = "run"
+    CATEGORY = "AniPortrait"
+    OUTPUT_NODE = True
+
+    def run(self, image, box):
+        return (image[:,box[1]:box[3],box[0]:box[2],:],box,)
+
+class CoverVideo:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "bgimage": ("IMAGE",),
+                "coverimage": ("IMAGE",),
+                "box": ("BOX",),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "run"
+    CATEGORY = "AniPortrait"
+    OUTPUT_NODE = True
+
+    def run(self, bgimage, coverimage, box):
+        bgimage[:,box[1]:box[1]+coverimage.shape[1],box[0]:+box[0]+coverimage.shape[2],:]=coverimage
+        return (bgimage,)
 
 NODE_CLASS_MAPPINGS = {
     "AniPortraitLoader":AniPortraitLoader,
     "AniPortraitRun":AniPortraitRun,
+    "MaskList2Video":MaskList2Video,
+    "Box2Video":Box2Video,
+    "CoverVideo":CoverVideo,
 }
