@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 
 import torch
 from diffusers.configuration_utils import ConfigMixin, register_to_config
-from diffusers.models.embeddings import CaptionProjection
+from diffusers.models.embeddings import PixArtAlphaTextProjection
 from diffusers.models.lora import LoRACompatibleConv, LoRACompatibleLinear
 from diffusers.models.modeling_utils import ModelMixin
 from diffusers.models.normalization import AdaLayerNormSingle
@@ -200,7 +200,7 @@ class Transformer2DModel(ModelMixin, ConfigMixin):
 
         self.caption_projection = None
         if caption_channels is not None:
-            self.caption_projection = CaptionProjection(
+            self.caption_projection = PixArtAlphaTextProjection(
                 in_features=caption_channels, hidden_size=inner_dim
             )
 
