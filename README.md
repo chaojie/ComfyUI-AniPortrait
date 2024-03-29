@@ -1,5 +1,7 @@
 # ComfyUI-AniPortrait
 
+Thanks to the contribution from [WainWong](https://github.com/WainWong), the support for the new version of diffusers is now available.
+
 1. base workflow
 
 <img src="wf.png" raw=true>
