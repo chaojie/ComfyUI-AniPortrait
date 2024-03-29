@@ -31,4 +31,3 @@ pip install -r requirements.txt
 
 ## [AniPortrait](https://github.com/Zejun-Yang/AniPortrait)
 
-如果安装其他node更新了diffusers版本，需要pip install diffusers==0.24.0再安装回来
