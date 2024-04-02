@@ -201,6 +201,7 @@ class AniPortraitRun:
                 "cfg": ("FLOAT",{"default":3.5}),
                 "seed": ("INT",{"default":1234}),
                 "weight_dtype": (["fp16","fp32"], {"default": "fp16"}),
+                "min_face_detection_confidence": ("FLOAT",{"default":0.5}),
             },
         }
 
@@ -208,7 +209,7 @@ class AniPortraitRun:
     FUNCTION = "run"
     CATEGORY = "AniPortrait"
 
-    def run(self,pipe,wav2vec2_path,a2m_model,image,pose,audio_path,width,height,video_length,steps,cfg,seed,weight_dtype):
+    def run(self,pipe,wav2vec2_path,a2m_model,image,pose,audio_path,width,height,video_length,steps,cfg,seed,weight_dtype,min_face_detection_confidence):
         parser = argparse.ArgumentParser()
         parser.add_argument("--config", type=str, default=config_path)
         parser.add_argument("-W", type=int, default=512)
@@ -258,7 +259,7 @@ class AniPortraitRun:
         #save_dir.mkdir(exist_ok=True, parents=True)
 
 
-        lmk_extractor = LMKExtractor()
+        lmk_extractor = LMKExtractor(min_face_detection_confidence=min_face_detection_confidence)
         vis = FaceMeshVisualizer(forehead_edge=False)
         
         #ref_name = Path(ref_image_path).stem
@@ -270,6 +271,7 @@ class AniPortraitRun:
         
         face_result = lmk_extractor(ref_image_np)
         assert face_result is not None, "No face detected."
+        print(f'{face_result["lmks"]}')
         lmks = face_result['lmks'].astype(np.float32)
 
 

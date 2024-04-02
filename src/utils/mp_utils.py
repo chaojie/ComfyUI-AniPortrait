@@ -17,7 +17,7 @@ CUR_DIR = os.path.dirname(__file__)
 
 
 class LMKExtractor():
-    def __init__(self, FPS=25):
+    def __init__(self,min_face_detection_confidence=0.5,FPS=25):
         # Create an FaceLandmarker object.
         self.mode = mp.tasks.vision.FaceDetectorOptions.running_mode.IMAGE
         base_options = python.BaseOptions(model_asset_path=os.path.join(CUR_DIR, 'mp_models/face_landmarker_v2_with_blendshapes.task'))
@@ -26,7 +26,10 @@ class LMKExtractor():
                                             running_mode=self.mode,
                                             output_face_blendshapes=True,
                                             output_facial_transformation_matrixes=True,
-                                            num_faces=1)
+                                            num_faces=1,
+                                            min_face_detection_confidence=min_face_detection_confidence,
+                                            min_face_presence_confidence=min_face_detection_confidence,
+                                            min_tracking_confidence=min_face_detection_confidence)
         self.detector = face_landmark.FaceLandmarker.create_from_options(options)
         self.last_ts = 0
         self.frame_ms = int(1000 / FPS)
