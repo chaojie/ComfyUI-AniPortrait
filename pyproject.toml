@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-aniportrait"
+description = "ComfyUI [a/AniPortrait](https://github.com/Zejun-Yang/AniPortrait)"
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["accelerate", "av", "clip @ https://github.com/openai/CLIP/archive/d50d76daa670286dd6cacf3bcd80b5e4823fc8e1.zip#sha256=b5842c25da441d6c581b53a5c60e0c2127ebafe0f746f8e15561a006c6c3be6a", "decord", "diffusers>=0.26.3", "einops", "imageio", "imageio-ffmpeg", "omegaconf", "onnxruntime-gpu", "open-clip-torch", "opencv-contrib-python", "opencv-python", "controlnet-aux", "mediapipe", "librosa", "ffmpeg-python"]
+
+[project.urls]
+Repository = "https://github.com/chaojie/ComfyUI-AniPortrait"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI-AniPortrait"
+Icon = ""
